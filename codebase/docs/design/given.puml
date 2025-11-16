@@ -1,0 +1,88 @@
+@startuml
+package domain {
+    +class Card {
+        -cardType: CardType
+        -isMarked: boolean
+        -isFacedUp: boolean
+
+        +Card(cardType: CardType): void
+        +getCardType(): CardType
+        +markCard(): void
+        +checkIfMarkd(): boolean
+        +setFacedUp(): void
+        +checkIfFacedUp(): void
+    }
+    enum CardType{
+        NOPE,
+        DEFUSE,
+        ATTACK,
+        SHUFFLE,
+        SKIP,
+        SEE_THE_FUTURE,
+        CAT_ONE,
+        CAT_TWO,
+        CAT_THREE,
+        CAT_FOUR,
+        EXPLODING_KITTEN,
+        STREAKING_KITTEN,
+        SWAP_TOP_AND_BOTTOM,
+        GARBAGE_COLLECTION,
+        CURSE_OF_THE_CAT_BUTT,
+        ALTER_THE_FUTURE,
+        CATOMIC_BOMB,
+        SUPER_SKIP,
+        MARK,
+        IMPLODING_KITTEN,
+        REVERSE,
+        FERAL_CAT,
+        TARGETED_ATTACK,
+        DRAW_FROM_THE_BOTTOM;
+
+        - {final} gameType: GameType
+        ~CardType(gameType: GameType): void
+    }
+    +class Deck {
+        -deck: List<Card>
+        -rand: Random
+        -gameType: GameType
+        -numberOfPlayers: int
+        -maxDeckSize: int
+        -instantiator: Instantiator
+        -{static}{final} DECK_FULL_EXECEPTION: string
+        -{static}{final} DRAW_FROM_EMPTY_DECK_EXCEPTION: string
+        -{static}{final} NEGATIVE_INDEX_EXCEPTION: string
+        -{static}{final} INDEX_GREATER_THAN_DECK_SIZE_EXCEPTION: string
+        -{static}{final} MISMATCH_ORDER_SIZE_EXCEPTION: string
+        -{static}{final} INDEX_OUT_OF_RANGE_EXCEPTION: string
+
+        +Deck(deck: List<Card>, rand: Random): void
+        +getDeckSize(): int
+        +getCardAtIndex(index: int): Card
+        +initializeDeck(): void
+        +shuffleDeck(): void
+        +insertCard(cardType: CardType, numberOfCards: int, bottom: boolean)
+        +drawCard(): Card
+        +drawCardFromBottom(): Card
+        +setNumberOfPlayers(int numberOfPlayers): void
+        +chooseGameType(gameType: GameType): void
+        +removeBombs(): int
+        +insertExplodingKittenAtIndex(indexToInsert: int): void
+        +insertImplodingKittenAtIndex(indexToInsert: int): void
+        #getCardTypeAtIndex(index: int): CardType
+        +reorderDeckCards(newOrderIndices: int[], cardsToReorder: List<Card>): void
+        -addedOutOfBounds(numberOfCards: int): boolean
+        -checkIfExplodingKitten(index: int): boolean
+        -checkIfIndexOutOfRange(index: int): boolean
+    }
+}
+
+Card-->CardType
+CardType-->GameType
+
+Deck-->Card
+Deck-->Random
+Deck-->GameType
+Deck-->Instantiator
+Deck..>CardType
+
+@enduml
