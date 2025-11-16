@@ -63,7 +63,7 @@ package domain {
         +insertCard(cardType: CardType, numberOfCards: int, bottom: boolean)
         +drawCard(): Card
         +drawCardFromBottom(): Card
-        +setNumberOfPlayers(int numberOfPlayers): void
+        +setNumberOfPlayers(numberOfPlayers: int): void
         +chooseGameType(gameType: GameType): void
         +removeBombs(): int
         +insertExplodingKittenAtIndex(indexToInsert: int): void
@@ -74,15 +74,246 @@ package domain {
         -checkIfExplodingKitten(index: int): boolean
         -checkIfIndexOutOfRange(index: int): boolean
     }
+    +class Game {
+        -numberOfPlayers: int
+        -gameType: GameType
+        -deck: Deck
+        -players: Players[]
+        -rand: Random
+
+        -currentPlayerTurn: int
+        -currentPlayerNumberOfTurns: int
+        -isReversed: boolean
+        -attackQueue: List<Integer>
+        -attackCounter: int
+        -numberOfAttacks: int
+        -turnTracker: int[]
+        -attacked: boolean
+
+        -{static}{final} PLAYER_HAND_EMPTY_EXCEPTION: String
+        -{static}{final} INVALID_PLAYER_INDEX_EXCEPTION: String
+        -{static}{final} INVALID_GAME_TYPE_EXCEPTION: String
+        -{static}{final} NO_PLAYERS_EXCEPTION: String
+        -{static}{final} OUT_OF_BOUNDS_PLAYER_INDEX_EXCEPTION: String
+        -{static}{final} PLAYER_DEAD_EXCEPTION: String
+        -{static}{final} CARD_INDEX_OUT_OF_BOUNDS_EXCEPTION: String
+        -{static}{final} CARD_TYPE_NOT_FOUND_EXCEPTION: String
+        -{static}{final} INVALID_NUMBER_OF_PLAYERS_EXCEPTION: String
+        -{static}{final} NUMBER_OF_TURNS_OUT_OF_BOUNDS_EXCEPTION: String
+
+        +Game(numberOfPlayers: int, gameType: GameType, deck: Deck, players: Player[], rand: Random, attackQueue: List<Integer>, turnTracker: int[]): void
+
+        +swapTopAndBottom(): void
+        +stealRandomCard(playerToStealFrom: int): Card
+        +stealCardType(cardType: CardType, playerToStealFrom: int): void
+        +startAttackPhase(): void
+        +playAttack(): void
+        +playTargetedAttack(attackedPlayerIndex: int): void
+        +playExploadingKitten(playerIndex: int): boolean
+        +playImplodingKitten(): void
+        +playDefuse(idxToInsertExplodingKitten: int, playerIndex: int): void
+        +drawFromBottom(): Card
+        +playCatomicBomb(): void
+        +setNumberOfPlayers(numberOfPlayers: int): void
+        +playReverse(): void
+        +retrieveGameMode(gameType: GameType): void
+        +selectRandomPlayer(): Player
+        +playShuffle(numberOfShuffles: int): void
+        +playSkip(superSkip: boolean): int
+        +playGarbageCollection(cardToDiscard: CardType): void
+        +getDeck(): Deck
+        +incrementPlayerTurn(): void
+        +incrementAttackCounter(): void
+        +setAttackCounter(playerIndex: int): void
+        ~getGameTypeForTesting(): GameType
+        +getGameType(): GameType
+        +getPlayerAtIndex(playerIndex: int): Player
+        +addAttacks(): void
+        +playMark(playerIndex: int, cardIndex: int): void
+        +addAttackQueue(attack: int): void
+        +removeAttackQueue(): int
+        +isAttackQueueEmpty(): boolean
+        +setNumberOfTurns(): void
+        +getPlayerTurn(): int
+        +getNumberOfPlayers(): int
+        +checkNumberOfAlivePlayers(): int
+        +setCurrentPlayerNumberOfTurns(numberOfTurns: int): void
+        +decrementNumberOfTurns(): void
+        +getNumberOfTurns(): int
+        +getDeckSize(): int
+        +drawCard(): Card
+        +getCardAtIndex(cardIndex: int): Card
+        +removeCardFromHand(playerIndex: int, cardType: CardType)
+        +getIndexOfCardFromHand(playerIndex: int, cardType: CardType)
+        +addCardToHand(card: Card): void
+        +checkIfPlayerDead(playerIndex: int): boolean
+        +checkIfPlayerHasCard(playerIndex: int, cardType: CardType): boolean
+        +getCardType(playerIndex: int, cardIndex: int): CardType
+        +public getHandSize(playerIndex: int): int
+        +getDeckCardType(deckIndex: int): CardType
+        +getIsReversed(): boolean
+        #setCurrentPlayerTurn(turn: int): void
+        -matchingGameType(gameType: GameType): boolean
+        -checkCardOutOfBoundsIndexed(cardIndex: int, playerIndex: int): boolean
+        -checkUserOutOfBounds(userIndex: int): boolean
+        -checkDeckHasOneCardOrLess(): boolean
+        -checkPlayerHandEmpty(player: Player): boolean
+        -checkInvalidNumberOfPlayers(numPlayers: int): boolean
+        -hasZeroPlayers(): boolean
+        -checkIfNumberOfTurnsOutOfBounds(): boolean
+        -checkIfNumberOfTurnsIsZero(): boolean
+        -setTurnToTargetedIndexIfAttackOccurred(): void
+        +getTurnCountOfPlayer(playerIndex: int)
+        +getAttacked(): boolean
+        +getAttackCounter(): int
+        +getNumberOfAttacks(): int
+        ~setNumberOfAttacks(numberOfAttacks: int): void
+        ~setAttacked(attacked: boolean): void
+    }
+    +enum GameType {
+        NONE,
+        EXPLODING_KITTENS,
+        STREAKING_KITTENS,
+	    IMPLODING_KITTENS
+    }
+    +class Instantiator {
+        +createCard(cardType: CardType): Card
+        +createRandom(): Random
+        +createCardList(): ArrayList<Card>
+    }
+    +class Player {
+        -playerID: int
+        -hand: List<Card>
+        -rand: Random
+        -isCursed: boolean
+
+        -{static}{final} MUST_ADD_DEFUSE_CARD_EXCEPTION: String
+        -{static}{final} INVALID_INDEX_EXCEPTION: String
+        -{static}{final} NO_CARD_FOUND_EXCEPTION: String
+
+        +Player(playerID: int, instantiator: Instantiator): void
+        +getPlayerID(): int
+        +addDefuse(defuse: Card): void
+        +addCardToHand(card: Card): void
+        +hasCard(cardType: CardType): boolean
+        +getHandSize(): int
+        +getCardAt(index: int): Card
+        +getIndexOfCard(cardType: CardType): int
+        +removeCardFromHand(index: int): CardType
+        +shuffleHand(): void
+        +checkNumberOfCardsInHand(cardType: CardType): int
+        +getIsDead(): boolean
+        +setIsDead(): void
+        +getIsCursed(): boolean
+        +setCursed(isCursed: boolean): void
+    }
+}
+
+package presentation {
+    +class GameUI {
+        -game: Game
+        -messages: ResourceBundle
+
+        +GameUI(game: Game): void
+        +chooseLanguage(): void
+        +chooseGame(): void
+        +chooseNumberOfPlayers(): void
+
+        -checkValidPlayerIndexInput(): int
+        -startAttackFollowUp(targeted: boolean): void
+        -swapTopAndBottom(): void
+        -playAttack(targeted: boolean): void
+        -playGarbageCollection(): void
+        -printPlayerTurn(): void
+        -playedCard(): int
+        -playSpecialCombo(): int
+        -playNope(playerIndex: int): void
+        -checkAllPlayersForNope(playerIndex: int): boolean
+        -playExplodingKitten(playerIndex: int): boolean
+        -endTurn(): boolean
+        -checkIfTheyEndTurn(): boolean
+        -playCurseOfTheCatButt(): void
+        -playSpecialComboTwoCards(cardType: CardType): void
+        -drawFromTheBottom(): void
+        -playMark(): void
+        -playCatomicBomb(): void
+        -playReverse(): void
+        -playSpecialComboThreeCards(cardType: CardType): void
+        -playSeeTheFuture(): void
+        -playShuffle(): void
+        -playSkip(superSkip: boolean): void
+        -playAlterTheFuture(): void
+        -checkIfCatCard(cardType: CardType): boolean
+        -checkNumberOfFeralCats(playerIndex: int): int
+        -promptCursedMessage(): void
+        -checkIfInvalid(card: Card): boolean
+        -playImplodingKitten(card: Card): boolean
+        +startTurn(): void
+        +endGame(): void
+        +checkIfGameOver(): boolean
+        -checkUserWithinBounds(userIndex: int): boolean
+        -checkUserOutOfBounds(userIndex: int): boolean
+        -hasCard(userIndex: int, cardType: CardType): boolean
+        -hasCardDirect(player: Player, cardType: CardType): boolean
+        -checkCardWithinBounds(cardIndex: int, player: Player): boolean
+        -checkMatchingCardType(cardType: CardType, cardTypeTwo: CardType): boolean
+        -checkIfPlayerIsCursed(player: Player): boolean
+        -checkReversed(): boolean
+        -getHandSize(playerIndex: int): int
+        -checkIfCardMarked(playerIndex: int, cardIndex: int): boolean
+        -getNumberOfPlayers(): int
+        -checkExplodingKitten(playerIndex: int): boolean
+        -checkIfNumberOfTurnsGreaterThanZero(): boolean
+        -checkIfNumberOfTurnsIsZero(): boolean
+        -checkIfCurrentPlayerTurn(playerIndex: int): boolean
+        -getDeckSize(): int
+        -matchingGameType(gameType: GameType): boolean
+        -checkFeralCat(numberOfFeralCatsToPlay: int): boolean
+        -checkIfDifferentCardType(cardType: CardType, cardTypeTwo: cardType): boolean
+        -checkAllPlayersNope(): boolean
+        -checkNumberOfCards(player: Player, cardType: CardType): boolean
+        -getLocalizedCardType(cardType: CardType): String
+        -checkNegativeIndexDeck(indexToInsert: int): boolean
+        -checkIfGreaterThanMaxIndexDeck(indexToInsert: int): boolean
+    }
+
+    +class Main {
+        +{static}main(args: String[]): void
+    }
 }
 
 Card-->CardType
 CardType-->GameType
 
 Deck-->Card
-Deck-->Random
 Deck-->GameType
 Deck-->Instantiator
 Deck..>CardType
+
+Game-->GameType
+Game-->Deck
+Game-->Player
+Game..>Card
+Game..>Deck
+
+Instantiator..>CardType
+
+Player-->Card
+Player..>Instantiator
+Player..>Card
+Player..>CardType
+
+GameUI-->Game
+
+GameUI..>CardType
+GameUI..>Card
+GameUI..>Player
+
+Main..>Instantiator
+Main..>Player
+Main..>Game
+Main..>GameUI
+
+
 
 @enduml
