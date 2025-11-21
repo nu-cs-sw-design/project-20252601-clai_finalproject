@@ -24,43 +24,145 @@ package presentation {
 
 package domain {
     +class GameStateLayer {
-        -gameLogic: GameLogicLayer
-        -players: Player[]
+        -gameLogic: GameLogicInterface
+
+        -deck: GameDeck
+        -currentPlayer: int
+        -numberOfPlayers: int
 
         +GameStateLayer(): void
         +setGameGameType(gameSelection: String): boolean
-
         +setNumberOfPlayers(playerNum: int): boolean
-        -generatePlayer
 
+        +nextMove(): boolean
 
     }
     +class Player {
+        -playerID: int
+        -rand: Random
+        -isCursed: boolean
+        -isDead: boolean
+
+        -{static}{final} MUST_ADD_DEFUSE_CARD_EXCEPTION: String
+        -{static}{final} INVALID_INDEX_EXCEPTION: String
+        -{static}{final} NO_CARD_FOUND_EXCEPTION: String
+
+        ~Player(playerID: int, instantiator: Instantiator): void
+        ~getPlayerID(): int
+        ~getIsDead(): boolean
+        ~setIsDead(): void
+        ~getIsCursed(): boolean
+        ~setCursed(isCursed: boolean): void
+    }
+    +interface GameLogicInterface {
 
     }
-    +class GameLogicLayer {
-
+    +interface DeckInitializationInterface {
+        +generateGameDeck(): Card[]
     }
-    +class Deck {
+    +class GameDeck {
+        -availableCards: Card[]
+        -playerHands: Map<int, Card>
+        -initializationAlgorithm: DeckInitializationInterface
 
+        +GameDeck(numPlayers: int): boolean
+        -initializeDeck(): boolean
+        -shuffleDeck(numTimes: int): boolean
+
+        ~drawCard(playerNum: int, fromBottom: boolean): boolean
+        ~insertCard(playerID: int, cardType: CardType, numberOfCards: int, bottom: boolean): boolean
     }
     +class Card {
+        -cardType: CardType
+        -isMarked: boolean
+        -isFacedUp: boolean
 
+        ~Card(cardType: CardType): void
+        ~getCardType(): CardType
+        ~markCard(): void
+        ~checkIfMarked(): boolean
+        ~setFacedUp(): void
+        ~checkIfFacedUp(): void
     }
     +class GameLogicType {
 
+    }
+
+    +enum CardType {
+        NOPE,
+        DEFUSE,
+        ATTACK,
+        SHUFFLE,
+        SKIP,
+        SEE_THE_FUTURE,
+        CAT_ONE,
+        CAT_TWO,
+        CAT_THREE,
+        CAT_FOUR,
+        EXPLODING_KITTEN,
+        STREAKING_KITTEN,
+        SWAP_TOP_AND_BOTTOM,
+        GARBAGE_COLLECTION,
+        CURSE_OF_THE_CAT_BUTT,
+        ALTER_THE_FUTURE,
+        CATOMIC_BOMB,
+        SUPER_SKIP,
+        MARK,
+        IMPLODING_KITTEN,
+        REVERSE,
+        FERAL_CAT,
+        TARGETED_ATTACK,
+        DRAW_FROM_THE_BOTTOM;
+
+        - {final} gameType: GameType
+        ~CardType(gameType: GameType): void
+    }
+
+    +class ExplodingKittens {
+
+    }
+    +class StreakingKittens {
+
+    }
+    +class ImplodingKittens {
+
+    }
+    +class GameMoveObjects {
+        -playCurseOfTheCatButt(): void
+        -playSpecialComboTwoCards(cardType: CardType): void
+        -playMark(): void
+        -playCatomicBomb(): void
+        -playReverse(): void
+        -playSpecialComboThreeCards(cardType: CardType): void
+        -playSeeTheFuture(): void
+        -playShuffle(): void
+        -playSkip(superSkip: boolean): void
+        -playAlterTheFuture(): void
+        -playSpecialCombo(): int
+        -playNope(playerIndex: int): void
+        -playExplodingKitten(playerIndex: int): boolean
     }
 }
 
 Main-->GameUI
 
 GameUI-->GameStateLayer
+GameStateLayer-->GameLogicInterface
+GameStateLayer-->GameDeck
+
+GameDeck-->Card
 GameStateLayer-->Player
-GameStateLayer-->GameLogicLayer
+GameDeck-->DeckInitializationInterface
 
-GameLogicLayer-->GameLogicType
-GameLogicLayer-->Deck
+Card-->CardType
 
-Deck-->Card
+GameLogicInterface--|>ExplodingKittens
+GameLogicInterface--|>StreakingKittens
+GameLogicInterface--|>ImplodingKittens
+
+ExplodingKittens..>GameMoveObjects
+StreakingKittens..>GameMoveObjects
+ImplodingKittens..>GameMoveObjects
+
 
 @enduml
