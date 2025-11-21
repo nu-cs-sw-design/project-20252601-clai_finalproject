@@ -1,0 +1,44 @@
+@startuml
+package presentation {
+    +class Main {
+        +{static}main(args: String[]): void
+    }
+
+    +class GameUI {
+
+    }
+}
+
+package domain {
+    +class GameStateLayer {
+
+    }
+    +class Player {
+
+    }
+    +class GameLogicLayer {
+
+    }
+    +class Deck {
+
+    }
+    +class Card {
+
+    }
+    +class GameLogicType {
+
+    }
+}
+
+Main-->GameUI
+
+GameUI-->GameStateLayer
+GameStateLayer-->Player
+GameStateLayer-->GameLogicLayer
+
+GameLogicLayer-->GameLogicType
+GameLogicLayer-->Deck
+
+Deck-->Card
+
+@enduml
