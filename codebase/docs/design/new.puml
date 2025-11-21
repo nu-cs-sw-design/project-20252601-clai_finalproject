@@ -5,12 +5,34 @@ package presentation {
     }
 
     +class GameUI {
+        -gameState: GameStateLayer
+        -localizedMessages: ResourceBundle
 
+        +GameUI(): void
+
+        +handleSetupGame(): void
+        -chooseLanguage(): void
+        -chooseGame(): void
+        -chooseNumberOfPlayers(): void
+
+        -runDisplayLoop(): void
+        -handleDisplayTurnEndResult(): void
+
+        -handleShowEndGame(): void
     }
 }
 
 package domain {
     +class GameStateLayer {
+        -gameLogic: GameLogicLayer
+        -players: Player[]
+
+        +GameStateLayer(): void
+        +setGameGameType(gameSelection: String): boolean
+
+        +setNumberOfPlayers(playerNum: int): boolean
+        -generatePlayer
+
 
     }
     +class Player {
