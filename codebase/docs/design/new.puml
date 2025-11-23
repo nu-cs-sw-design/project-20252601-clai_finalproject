@@ -79,16 +79,25 @@ package domain {
         ~getIsCursed(): boolean
         ~setCursed(isCursed: boolean): void
     }
-    +interface GameLogicInterface {
-
+    +abstract DeckInitializationStrategy {
+        +{abstract}generateGameDeck(): Card[]
     }
-    +interface DeckInitializationInterface {
+    +class ExplodingKittensDeck {
         +generateGameDeck(): Card[]
     }
+    +class ImplodingKittensDeck {
+        +generateGameDeck(): Card[]
+    }
+    +class StreakingKittensDeck {
+        +generateGameDeck(): Card[]
+    }
+
+
     +class GameDeck {
         -availableCards: Card[]
         -playerHands: Map<int, Card>
-        -initializationAlgorithm: DeckInitializationInterface
+        -initializationStrategy: DeckInitializationStrategy
+        -deckType: GameType
 
         -{static}{final} DECK_FULL_EXECEPTION: string
         -{static}{final} DRAW_FROM_EMPTY_DECK_EXCEPTION: string
@@ -101,7 +110,7 @@ package domain {
         -initializeDeck(): boolean
         -shuffleDeck(numTimes: int): boolean
 
-        ~drawCard(playerNum: int, fromBottom: boolean): boolean
+        ~drawCard(playerNum: int, fromBottom: boolean): Card
         ~insertCard(playerID: int, cardType: CardType, numberOfCards: int, bottom: boolean): boolean
         ~removeBombs(): int
 
@@ -112,17 +121,41 @@ package domain {
         -checkIfExplodingKitten(index: int): boolean
         -checkIfIndexOutOfRange(index: int): boolean
     }
+
+    +enum GameType {
+        NONE,
+        EXPLODING_KITTENS,
+        STREAKING_KITTENS,
+        IMPLODING_KITTENS
+    }
+
+
     +class Card {
-        -cardType: CardType
+        -CardActionStrategy: CardStrategy
         -isMarked: boolean
         -isFacedUp: boolean
 
-        ~Card(cardType: CardType): void
-        ~getCardType(): CardType
+        ~Card(cardType: CardStrategy): void
+        ~getCardStrategy(): CardStrategy
         ~markCard(): void
         ~checkIfMarked(): boolean
         ~setFacedUp(): void
         ~checkIfFacedUp(): void
+    }
+    +abstract CardStrategy {
+        +{abstract}action(): void
+    }
+    +class ExplodingKittenCard {
+        +action(): void
+    }
+    +class NopeCard {
+        +action(): void
+    }
+    +class ShuffleCard {
+        +action(): void
+    }
+    +class SwapTopAndBottomCard {
+        +action(): void
     }
     +enum CardType {
         NOPE,
@@ -153,58 +186,31 @@ package domain {
         - {final} gameType: GameType
         ~CardType(gameType: GameType): void
     }
-
-    +class ExplodingKittens {
-
-    }
-    +class StreakingKittens {
-
-    }
-    +class ImplodingKittens {
-
-    }
-    +class CardSpecialEvents {
-        -playCurseOfTheCatButt(): void
-        -playSpecialComboTwoCards(cardType: CardType): void
-        -playMark(): void
-        -playCatomicBomb(): void
-        -playReverse(): void
-        -playSpecialComboThreeCards(cardType: CardType): void
-        -playSeeTheFuture(): void
-        -playShuffle(): void
-        -playSkip(superSkip: boolean): void
-        -playAlterTheFuture(): void
-        -playSpecialCombo(): int
-        -playNope(playerIndex: int): void
-        -playExplodingKitten(playerIndex: int): boolean
-    }
-
-
-    +class GameLogicLayer {
-    }
 }
 
 Main-->GameUI
 
 GameUI-->GameStateLayer
-GameStateLayer-->GameLogicLayer
 GameStateLayer-->GameDeck
 
 GameDeck-->Card
 GameStateLayer-->Player
-GameDeck-->DeckInitializationInterface
+GameDeck-->DeckInitializationStrategy
 
+ExplodingKittensDeck=--|>DeckInitializationStrategy
+ImplodingKittensDeck=--|>DeckInitializationStrategy
+StreakingKittensDeck--|>DeckInitializationStrategy
+
+GameDeck-->GameType
+
+Card-->CardStrategy
 Card-->CardType
 
-GameLogicLayer-->GameLogicInterface
+ExplodingKittenCard--|>CardStrategy
+NopeCard--|>CardStrategy
+ShuffleCard--|>CardStrategy
+SwapTopAndBottomCard--|>CardStrategy
 
-GameLogicInterface--|>ExplodingKittens
-GameLogicInterface--|>StreakingKittens
-GameLogicInterface--|>ImplodingKittens
-
-ExplodingKittens..>CardSpecialEvents
-StreakingKittens..>CardSpecialEvents
-ImplodingKittens..>CardSpecialEvents
 
 
 @enduml
