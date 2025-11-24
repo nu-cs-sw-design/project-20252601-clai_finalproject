@@ -16,7 +16,7 @@ package presentation {
         -chooseNumberOfPlayers(): void
 
         -runDisplayLoop(): void
-        -requestNextMove(): void
+        -promptNextMove(): void
         -handleDisplayTurnEndResult(): void
 
         -handleShowEndGame(): void
@@ -58,7 +58,57 @@ package domain {
         ~setNumberOfPlayers(playerNum: int): boolean
         ~getNumCardsInHand(playerID: int): int
 
+        +getPossibleMoves(playerID: int): String
+        +playCard(playerID: int, card: CardStrategy): String
+        +determinePlayEffects(): String
         +nextMove(): String
+
+        -updateGameState(): void
+
+        -checkValidPlayerIndex(playerIndex: int): boolean
+
+        -stealRandomCard(playerToStealFrom: int): Card
+        -stealCard(card: CardStrategy, playerToStealFrom: int): boolean
+
+        -selectRandomPlayer(): Player
+        -getDeck(): Deck
+        -incrementPlayerTurn(): void
+        -incrementAttackCounter(): void
+        -setAttackCounter(playerIndex: int): void
+        -getPlayerAtIndex(playerIndex: int): Player
+
+        -addAttacks(): void
+        -addAttackQueue(attack: int): void
+        -removeAttackQueue(): int
+        -isAttackQueueEmpty(): boolean
+
+        -setNumberOfTurns(): void
+        -getPlayerTurn(): int
+        -checkNumberOfAlivePlayers(): int
+        -setCurrentPlayerNumberOfTurns(numberOfTurns: int): void
+        -decrementNumberOfTurns(): void
+        -getNumberOfTurns(): int
+        -getDeckSize(): int
+        -drawCard(): Card
+        -getCardAtIndex(cardIndex: int): Card
+        -removeCardFromHand(playerIndex: int, card: CardStrategy)
+        -getIndexOfCardFromHand(playerIndex: int, card: CardStrategy)
+        -addCardToHand(card: Card): void
+        -checkIfPlayerDead(playerIndex: int): boolean
+        -checkIfPlayerHasCard(playerIndex: int, card: CardType): boolean
+        -getHandSize(playerIndex: int): int
+        -getIsReversed(): boolean
+        -setCurrentPlayerTurn(turn: int): void
+
+        -checkCardOutOfBoundsIndexed(cardIndex: int, playerIndex: int): boolean
+        -checkUserOutOfBounds(userIndex: int): boolean
+        -checkDeckHasOneCardOrLess(): boolean
+        -checkPlayerHandEmpty(player: Player): boolean
+        -checkInvalidNumberOfPlayers(numPlayers: int): boolean
+
+        -hasZeroPlayers(): boolean
+        -checkIfNumberOfTurnsOutOfBounds(): boolean
+        -checkIfNumberOfTurnsIsZero(): boolean
 
     }
     +class Player {
@@ -109,13 +159,16 @@ package domain {
         +GameDeck(numPlayers: int): boolean
         -initializeDeck(): boolean
         -shuffleDeck(numTimes: int): boolean
+        -shuffleHand(numTimes: int): boolean
 
         ~drawCard(playerNum: int, fromBottom: boolean): Card
-        ~insertCard(playerID: int, cardType: CardType, numberOfCards: int, bottom: boolean): boolean
+        ~insertCard(playerID: int, card: CardStrategy, numberOfCards: int, bottom: boolean): boolean
         ~removeBombs(): int
 
-        ~getCardTypeAtIndex(index: int): CardType
+        ~getCardTypeAtDeckIndex(index: int): CardType
         ~reorderDeckCards(newOrderIndices: int[], cardsToReorder: List<Card>): void
+
+        ~getNumCardsInHand(playerID: int): int
 
         -addedOutOfBounds(numberOfCards: int): boolean
         -checkIfExplodingKitten(index: int): boolean
@@ -143,19 +196,24 @@ package domain {
         ~checkIfFacedUp(): void
     }
     +abstract CardStrategy {
-        +{abstract}action(): void
+        +{abstract}action(state: GameStateLayer): void
+        +{abstract}returnCardType(): CardType
     }
     +class ExplodingKittenCard {
         +action(): void
+        +returnCardType(): CardType
     }
     +class NopeCard {
         +action(): void
+        +returnCardType(): CardType
     }
     +class ShuffleCard {
         +action(): void
+        +returnCardType(): CardType
     }
     +class SwapTopAndBottomCard {
         +action(): void
+        +returnCardType(): CardType
     }
     +enum CardType {
         NOPE,
@@ -204,7 +262,14 @@ StreakingKittensDeck--|>DeckInitializationStrategy
 GameDeck-->GameType
 
 Card-->CardStrategy
-Card-->CardType
+
+CardStrategy..>CardType
+
+GameStateLayer..>CardStrategy
+GameStateLayer..>Card
+GameStateLayer..>CardType
+GameDeck..>CardType
+
 
 ExplodingKittenCard--|>CardStrategy
 NopeCard--|>CardStrategy
