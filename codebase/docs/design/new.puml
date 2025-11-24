@@ -283,5 +283,4 @@ ShuffleCard--|>CardStrategy
 SwapTopAndBottomCard--|>CardStrategy
 
 
-
 @enduml
