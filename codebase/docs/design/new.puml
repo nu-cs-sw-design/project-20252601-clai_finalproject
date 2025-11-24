@@ -106,10 +106,8 @@ package domain {
         -checkPlayerHandEmpty(player: Player): boolean
         -checkInvalidNumberOfPlayers(numPlayers: int): boolean
 
-        -hasZeroPlayers(): boolean
         -checkIfNumberOfTurnsOutOfBounds(): boolean
         -checkIfNumberOfTurnsIsZero(): boolean
-
     }
     +class Player {
         -playerID: int
@@ -166,6 +164,7 @@ package domain {
         ~removeBombs(): int
 
         ~getCardTypeAtDeckIndex(index: int): CardType
+        ~getPlayerHand(playerID: int): Card[];
         ~reorderDeckCards(newOrderIndices: int[], cardsToReorder: List<Card>): void
 
         ~getNumCardsInHand(playerID: int): int
@@ -196,24 +195,32 @@ package domain {
         ~checkIfFacedUp(): void
     }
     +abstract CardStrategy {
-        +{abstract}action(state: GameStateLayer): void
+        +{abstract}action(playerID: int): void
         +{abstract}returnCardType(): CardType
     }
     +class ExplodingKittenCard {
-        +action(): void
+        +action(playerID: int): void
         +returnCardType(): CardType
+
+        -playExplodingKitten(playerIndex: int): boolean
     }
     +class NopeCard {
-        +action(): void
+        +action(playerID: int): void
         +returnCardType(): CardType
+
+        -playNope(playerIndex: int): void
     }
     +class ShuffleCard {
-        +action(): void
+        +action(playerID: int): void
         +returnCardType(): CardType
+
+        -playShuffle(): void
     }
     +class SwapTopAndBottomCard {
-        +action(): void
+        +action(playerID: int): void
         +returnCardType(): CardType
+
+        -playSwapTopAndBottom(): void
     }
     +enum CardType {
         NOPE,
