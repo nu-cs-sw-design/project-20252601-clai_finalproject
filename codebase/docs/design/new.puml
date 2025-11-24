@@ -54,7 +54,7 @@ package domain {
 
 
         +GameStateLayer(): void
-        ~setGameGameType(gameSelection: String): boolean
+        ~setGameGameType(gameSelection: GameType): boolean
         ~setNumberOfPlayers(playerNum: int): boolean
         ~getNumCardsInHand(playerID: int): int
 
@@ -145,7 +145,6 @@ package domain {
         -availableCards: Card[]
         -playerHands: Map<int, Card>
         -initializationStrategy: DeckInitializationStrategy
-        -deckType: GameType
 
         -{static}{final} DECK_FULL_EXECEPTION: string
         -{static}{final} DRAW_FROM_EMPTY_DECK_EXCEPTION: string
@@ -266,7 +265,7 @@ ExplodingKittensDeck=--|>DeckInitializationStrategy
 ImplodingKittensDeck=--|>DeckInitializationStrategy
 StreakingKittensDeck--|>DeckInitializationStrategy
 
-GameDeck-->GameType
+GameStateLayer-->GameType
 
 Card-->CardStrategy
 
