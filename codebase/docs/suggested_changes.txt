@@ -1,0 +1,3 @@
+- GameUI
+    - No clear delegation between different layers (business logic is seeping into the GameUI layer --> must clarify this and
+    have the GameUI call a GameLogic layer to delineate responsibility)

@@ -4,6 +4,7 @@ public class Card {
 	private CardType cardType;
 	private boolean isMarked;
 	private boolean isFacedUp;
+    private CardStrategy CardActionStrategy;
 
 	public Card(domain.game.CardType cardType) {
 		this.isMarked = false;

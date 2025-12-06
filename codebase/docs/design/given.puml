@@ -246,7 +246,7 @@ package presentation {
         -checkIfCatCard(cardType: CardType): boolean
         -checkNumberOfFeralCats(playerIndex: int): int
         -promptCursedMessage(): void
-        -checkIfInvalid(card: Card): boolean
+        -checkIfCardInvalid(card: Card): boolean
         -playImplodingKitten(card: Card): boolean
         +startTurn(): void
         +endGame(): void
