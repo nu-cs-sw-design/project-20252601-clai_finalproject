@@ -1,5 +1,7 @@
 package domain.game;
 
+import domain.game.cards.Card;
+
 import java.util.List;
 import java.util.Random;
 

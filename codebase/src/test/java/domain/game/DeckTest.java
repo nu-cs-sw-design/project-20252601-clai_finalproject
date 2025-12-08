@@ -1,5 +1,6 @@
 package domain.game;
 
+import domain.game.cards.Card;
 import org.easymock.EasyMock;
 import org.junit.jupiter.api.Test;
 

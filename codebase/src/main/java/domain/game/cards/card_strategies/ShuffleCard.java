@@ -1,4 +1,7 @@
-package domain.game;
+package domain.game.cards.card_strategies;
+
+import domain.game.CardType;
+import domain.game.cards.Card;
 
 import java.util.List;
 import java.util.Random;

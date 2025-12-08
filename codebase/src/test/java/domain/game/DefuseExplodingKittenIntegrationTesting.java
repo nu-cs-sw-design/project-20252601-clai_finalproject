@@ -1,5 +1,6 @@
 package domain.game;
 
+import domain.game.cards.Card;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;

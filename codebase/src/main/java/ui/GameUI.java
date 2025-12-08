@@ -1,6 +1,7 @@
 package ui;
 
 import domain.game.*;
+import domain.game.cards.Card;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -253,10 +254,10 @@ public class GameUI {
 		}
 	}
 
-	private void swapTopAndBottom() {
-		final String playSwapCardMessage = messages.getString("swapTopAndBottomCardPlayed");
-		System.out.println(playSwapCardMessage);
-		game.swapTopAndBottom();
+	private void swapTopAndBottom(int playerIndex) {
+        final String playSwapCardMessage = messages.getString("swapTopAndBottomCardPlayed");
+        System.out.println(playSwapCardMessage);
+        game.handlePlayCard(playerIndex, CardType.SWAP_TOP_AND_BOTTOM, true);
 	}
 
 	private void playAttack(boolean targeted) {
@@ -1533,10 +1534,11 @@ public class GameUI {
 							game.getDeck().getCardAtIndex(0)
 									.getCardType())
 					);
+
 					System.out.println(topCardMessage);
 					System.out.println(bottomCardMessage);
 
-					swapTopAndBottom();
+					swapTopAndBottom(playerIndex);
 
 					final String newTopCardMessage = MessageFormat.format(
 						messages.getString("newSwapTopMessage"),

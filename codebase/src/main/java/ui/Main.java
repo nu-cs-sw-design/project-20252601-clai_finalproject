@@ -1,7 +1,7 @@
 package ui;
 
 import domain.game.Instantiator;
-import domain.game.Card;
+import domain.game.cards.Card;
 import domain.game.CardType;
 import domain.game.Deck;
 import domain.game.Game;

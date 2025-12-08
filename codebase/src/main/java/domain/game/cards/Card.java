@@ -1,4 +1,10 @@
-package domain.game;
+package domain.game.cards;
+
+import domain.game.CardType;
+import domain.game.cards.card_strategies.CardStrategy;
+import domain.game.cards.card_strategies.NopeCard;
+import domain.game.cards.card_strategies.ShuffleCard;
+import domain.game.cards.card_strategies.SwapTopAndBottomCard;
 
 import java.util.List;
 
@@ -17,6 +23,8 @@ public class Card {
 			CardActionStrategy = new NopeCard();
 		} else if (cardType == CardType.SHUFFLE) {
             CardActionStrategy = new ShuffleCard();
+        } else if (cardType == CardType.SWAP_TOP_AND_BOTTOM) {
+            CardActionStrategy = new SwapTopAndBottomCard();
         } else {
             CardActionStrategy = null;
         }
