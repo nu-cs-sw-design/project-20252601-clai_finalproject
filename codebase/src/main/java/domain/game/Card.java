@@ -1,10 +1,12 @@
 package domain.game;
 
+import java.util.List;
+
 public class Card {
 	private CardType cardType;
 	private boolean isMarked;
 	private boolean isFacedUp;
-    private CardStrategy CardActionStrategy;
+	private CardStrategy CardActionStrategy;
 
 	public Card(domain.game.CardType cardType) {
 		this.isMarked = false;
@@ -30,6 +32,10 @@ public class Card {
 
 	public boolean checkIfFacedUp() {
 		return isFacedUp;
+	}
+
+	public List<Card> playCard(List<Card> deck) {
+		return CardActionStrategy.action(deck);
 	}
 }
 

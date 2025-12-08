@@ -1,6 +1,8 @@
 package domain.game;
 
+import java.util.List;
+
 public abstract class CardStrategy {
-    abstract void action(int playerID);
-    abstract void returnCardType();
+    abstract List<Card> action(List<Card> deck);
+    abstract CardType returnCardType();
 }

@@ -19,6 +19,7 @@ public class Main {
 		final int playerIDThree = 3;
 		final int playerIDFour = 4;
 		final int maxDeckSize = 42; // Change CONST
+
 		Instantiator instantiator = new Instantiator();
 
 		Deck deck = new domain.game.Deck(new ArrayList<>(), new SecureRandom(),
