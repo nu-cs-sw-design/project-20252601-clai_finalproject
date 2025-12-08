@@ -482,6 +482,17 @@ public class Game {
 		return numberOfAttacks;
 	}
 
+	// MORE SCALABLE VERSION
+	public boolean handlePlayCard(int playerIndex, CardType cardType, boolean shouldUpdateDeck) {
+		// get card, sanity check
+		if (!shouldUpdateDeck) {
+			return players[playerIndex].playerPlayCard(cardType);
+		} else {
+			return true;
+		}
+
+	}
+
 	void setNumberOfAttacks(int numberOfAttacks) {
 		this.numberOfAttacks = numberOfAttacks;
 	}

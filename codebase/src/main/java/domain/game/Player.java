@@ -110,4 +110,29 @@ public class Player {
 		this.isCursed = isCursed;
 	}
 
+	// scalable vers
+	public boolean playerPlayCard(CardType cardType) {
+		// check if player has card
+		if (!hasCard(cardType)) {
+			return false;
+		}
+
+		// otherwise, find card + play card
+		Card foundCard = null;
+		for (Card card : hand) {
+			if (card.getCardType() == cardType) {
+				foundCard = card;
+				break;
+			}
+		}
+		if (foundCard == null) return false;
+
+		// play and get modified card hand
+		List<Card> newHand = foundCard.playCard(hand);
+
+		// set hand to new hand
+		hand = newHand;
+		return true;
+	}
+
 }

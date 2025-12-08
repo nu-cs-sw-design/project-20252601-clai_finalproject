@@ -519,7 +519,7 @@ public class GameUI {
 				messages.getString("successfullyPlayedNope"), playerIndex);
 
 		System.out.println(decidedToPlayNope);
-		game.removeCardFromHand(playerIndex, CardType.NOPE);
+        game.handlePlayCard(playerIndex, CardType.NOPE, false);
 		System.out.println(successfullyPlayedNope);
 	}
 

@@ -12,6 +12,10 @@ public class Card {
 		this.isMarked = false;
 		this.cardType = cardType;
 		this.isFacedUp = false;
+		
+		if (cardType == CardType.NOPE) {
+			CardActionStrategy = new NopeCard();
+		}
 	}
 
 	public domain.game.CardType getCardType() {
@@ -34,7 +38,7 @@ public class Card {
 		return isFacedUp;
 	}
 
-	public List<Card> playCard(List<Card> deck) {
+	public List<Card> playCard(List<Card> deck) {	
 		return CardActionStrategy.action(deck);
 	}
 }
