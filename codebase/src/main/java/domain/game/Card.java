@@ -15,7 +15,11 @@ public class Card {
 		
 		if (cardType == CardType.NOPE) {
 			CardActionStrategy = new NopeCard();
-		}
+		} else if (cardType == CardType.SHUFFLE) {
+            CardActionStrategy = new ShuffleCard();
+        } else {
+            CardActionStrategy = null;
+        }
 	}
 
 	public domain.game.CardType getCardType() {

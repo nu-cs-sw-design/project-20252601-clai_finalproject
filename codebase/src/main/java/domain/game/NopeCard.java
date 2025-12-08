@@ -2,7 +2,7 @@ package domain.game;
 
 import java.util.List;
 
-public class NopeCard extends CardStrategy {
+public class NopeCard implements CardStrategy {
     // declare internal states
     private final CardType cardType = CardType.NOPE;
 

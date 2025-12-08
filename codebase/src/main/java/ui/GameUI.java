@@ -1150,7 +1150,9 @@ public class GameUI {
 				scanner.next();
 			}
 		}
-		game.playShuffle(numberOfShuffle);
+        for (int i = 0; i < numberOfShuffle; i++) {
+            game.handlePlayCard(-1, CardType.SHUFFLE, true);
+        }
 	}
 
 	private void playSkip(boolean superSkip) {

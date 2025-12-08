@@ -485,10 +485,10 @@ public class Game {
 	// MORE SCALABLE VERSION
 	public boolean handlePlayCard(int playerIndex, CardType cardType, boolean shouldUpdateDeck) {
 		// get card, sanity check
-		if (!shouldUpdateDeck) {
+		if (!shouldUpdateDeck && playerIndex > 0) {
 			return players[playerIndex].playerPlayCard(cardType);
 		} else {
-			return true;
+			return deck.deckPlayCard(cardType);
 		}
 
 	}

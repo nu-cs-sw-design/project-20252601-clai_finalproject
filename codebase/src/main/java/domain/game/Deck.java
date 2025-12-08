@@ -203,6 +203,24 @@ public class Deck {
 		}
 	}
 
+    public boolean deckPlayCard(CardType cardType) {
+        Card foundCard = null;
+        for (Card card : deck) {
+            if (card.getCardType() == cardType) {
+                foundCard = card;
+                break;
+            }
+        }
+        if (foundCard == null) return false;
+
+        // play and get modified card hand
+        List<Card> newDeck = foundCard.playCard(deck);
+
+        // set hand to new hand
+        deck = newDeck;
+        return true;
+    }
+
 	private boolean addedOutOfBounds(int numberOfCards) {
 		return (deck.size() + numberOfCards) > maxDeckSize;
 	}
