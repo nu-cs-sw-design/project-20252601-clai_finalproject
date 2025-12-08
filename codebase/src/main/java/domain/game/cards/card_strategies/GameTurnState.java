@@ -9,7 +9,6 @@ public class GameTurnState {
     private List<Card> deck;
     private boolean isPlayerDead;
     private int playerNumTurns;
-    private Card cardReference;
 
     // initialize empty GameTurnState
     public GameTurnState(List<Card> hand, List<Card> deck) {
@@ -17,7 +16,6 @@ public class GameTurnState {
         this.deck = deck;
         isPlayerDead = false;
         playerNumTurns = 0;
-        cardReference = null;
     }
 
     // getters
@@ -33,9 +31,6 @@ public class GameTurnState {
     public int getPlayerNumTurns() {
         return playerNumTurns;
     }
-    public Card getCardReference() {
-        return cardReference;
-    }
 
     // setters
     public void setHand(List<Card> hand) {
@@ -49,8 +44,5 @@ public class GameTurnState {
     }
     public void setPlayerNumTurns(int playerNumTurns) {
         this.playerNumTurns = playerNumTurns;
-    }
-    public void setCardReference(Card cardReference) {
-        this.cardReference = cardReference;
     }
 }

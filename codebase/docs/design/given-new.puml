@@ -4,6 +4,7 @@ package domain {
         -cardType: CardType
         -isMarked: boolean
         -isFacedUp: boolean
+        -cardStrategy: GameTurnState
 
         +Card(cardType: CardType): void
         +getCardType(): CardType
@@ -11,6 +12,8 @@ package domain {
         +checkIfMarkd(): boolean
         +setFacedUp(): void
         +checkIfFacedUp(): void
+
+        +playCard(gameTurnState: GameTurnState): GameTurnState
     }
     enum CardType{
         NOPE,
@@ -73,6 +76,9 @@ package domain {
         -addedOutOfBounds(numberOfCards: int): boolean
         -checkIfExplodingKitten(index: int): boolean
         -checkIfIndexOutOfRange(index: int): boolean
+
+        ~retrieveDeckContents(): List<Card>
+        ~setDeckContents(newDeck: List<Card>): void
     }
     +class Game {
         -numberOfPlayers: int
@@ -167,6 +173,9 @@ package domain {
         +getAttacked(): boolean
         +getAttackCounter(): int
         +getNumberOfAttacks(): int
+
+        +handlePlayCard(playerIndex: int, cardType: CardType): boolean
+
         ~setNumberOfAttacks(numberOfAttacks: int): void
         ~setAttacked(attacked: boolean): void
     }
@@ -207,7 +216,64 @@ package domain {
         +setIsDead(): void
         +getIsCursed(): boolean
         +setCursed(isCursed: boolean): void
+
+        ~retrievePlayerHand(): List<Card>
+        ~setPlayerHand(playerHand: List<Card>): void
+
+        +playerPlayCard(cardType: CardType, gameTurnState: GameTurnState): GameTurnState
     }
+
+     +abstract CardStrategy {
+            +{abstract}action(GameTurnState gameTurnState): GameTurnState
+            +{abstract}returnCardType(): CardType
+        }
+        +class ExplodingKittenCard {
+            -{final} cardType: CardType
+            +action(gameTurnState: GameTurnState): GameTurnState
+            +returnCardType(): CardType
+
+            -playExplodingKitten(playerIndex: int): boolean
+        }
+        +class NopeCard {
+            -{final} cardType: CardType
+
+            +action(gameTurnState: GameTurnState): GameTurnState
+            +returnCardType(): CardType
+
+            -playNope(gameTurnState: GameTurnState): GameTurnState
+        }
+        +class ShuffleCard {
+            -{final} cardType: CardType
+
+            +action(gameTurnState: GameTurnState):
+            +returnCardType(): CardType
+
+            -playShuffle(): void
+        }
+        +class SwapTopAndBottomCard {
+            -{final} cardType: CardType
+
+            +action(gameTurnState: GameTurnState): GameTurnState
+            +returnCardType(): CardType
+
+            -playSwapTopAndBottom(): void
+        }
+        +class GameTurnState {
+            -hand: List<Card>
+            -deck: List<Card>
+            -isPlayerDead: boolean
+            -playerNumTurns: int
+
+            +isPlayerDead(): boolean
+            +getHand(): List<Card>
+            +getDeck(): List<Card>
+            +getPlayerNumTurns(): int
+
+            +setHand(hand: List<Card>): void
+            +setDeck(hand: List<Card>): void
+            +setIsPlayerDead(isPlayerDead: boolean): void
+            +setPlayerNumTurns(playerNumTurns: int): void
+        }
 }
 
 package presentation {
@@ -277,7 +343,6 @@ package presentation {
         -checkNegativeIndexDeck(indexToInsert: int): boolean
         -checkIfGreaterThanMaxIndexDeck(indexToInsert: int): boolean
     }
-
     +class Main {
         +{static}main(args: String[]): void
     }
@@ -315,6 +380,15 @@ Main..>Player
 Main..>Game
 Main..>GameUI
 
+ExplodingKittenCard--|>CardStrategy
+NopeCard--|>CardStrategy
+ShuffleCard--|>CardStrategy
+SwapTopAndBottomCard--|>CardStrategy
 
+Card-->CardStrategy
+
+CardStrategy--> GameTurnState
+
+Game..>GameTurnState
 
 @enduml

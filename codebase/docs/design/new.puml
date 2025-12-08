@@ -192,6 +192,7 @@ package domain {
         ~checkIfMarked(): boolean
         ~setFacedUp(): void
         ~checkIfFacedUp(): void
+        ~playCard():
     }
     +abstract CardStrategy {
         +{abstract}action(playerID: int): void
