@@ -257,7 +257,7 @@ public class GameUI {
 	private void swapTopAndBottom(int playerIndex) {
         final String playSwapCardMessage = messages.getString("swapTopAndBottomCardPlayed");
         System.out.println(playSwapCardMessage);
-        game.handlePlayCard(playerIndex, CardType.SWAP_TOP_AND_BOTTOM, true);
+        game.handlePlayCard(playerIndex, CardType.SWAP_TOP_AND_BOTTOM);
 	}
 
 	private void playAttack(boolean targeted) {
@@ -520,7 +520,7 @@ public class GameUI {
 				messages.getString("successfullyPlayedNope"), playerIndex);
 
 		System.out.println(decidedToPlayNope);
-        game.handlePlayCard(playerIndex, CardType.NOPE, false);
+        game.handlePlayCard(playerIndex, CardType.NOPE);
 		System.out.println(successfullyPlayedNope);
 	}
 
@@ -1121,7 +1121,7 @@ public class GameUI {
 		}
 	}
 
-	private void playShuffle() {
+	private void playShuffle(int playerIndex) {
 		final String decidedShuffle = messages.getString("decidedShuffle");
 		final String enterShuffleTimes = messages.getString("enterShuffleTimes");
 		final String enterPositiveInteger = messages.getString("enterPositiveInteger");
@@ -1152,7 +1152,7 @@ public class GameUI {
 			}
 		}
         for (int i = 0; i < numberOfShuffle; i++) {
-            game.handlePlayCard(-1, CardType.SHUFFLE, true);
+            game.handlePlayCard(playerIndex, CardType.SHUFFLE);
         }
 	}
 
@@ -1324,6 +1324,7 @@ public class GameUI {
 			int playerIndex = game.getPlayerTurn();
 			Player player = game.getPlayerAtIndex(playerIndex);
 			CardType cardType = game.getCardType(playerIndex, cardIndex);
+			Card removedCard = null;
 
 			if (checkIfPlayerIsCursed(player) && checkMatchingCardType(cardType,
 					CardType.EXPLODING_KITTEN)) {
@@ -1491,7 +1492,7 @@ public class GameUI {
 					}
 				}
 			} else {
-				player.removeCardFromHand(cardIndex);
+				removedCard = player.removeCardFromHand(cardIndex);
 			}
 
 			if (checkIfDifferentCardType(cardType, CardType.EXPLODING_KITTEN)
@@ -1556,7 +1557,7 @@ public class GameUI {
 					System.out.println(newBottomCardMessage);
 					break;
 				case SHUFFLE:
-					playShuffle();
+					playShuffle(playerIndex);
 					break;
 				case SKIP:
 					playSkip(false);
@@ -1674,7 +1675,7 @@ public class GameUI {
 				getString("invalidPlayerIndexExplodingKitten");
 		boolean isPlayerExploded = false;
 		try {
-			isPlayerExploded = game.playExplodingKitten(playerIndex);
+			isPlayerExploded = game.handlePlayCard(playerIndex, CardType.EXPLODING_KITTEN);
 		} catch (UnsupportedOperationException e) {
 			System.out.println(invalidPlayerIndexExplodingKitten);
 		}

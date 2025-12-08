@@ -1,10 +1,7 @@
 package domain.game.cards;
 
 import domain.game.CardType;
-import domain.game.cards.card_strategies.CardStrategy;
-import domain.game.cards.card_strategies.NopeCard;
-import domain.game.cards.card_strategies.ShuffleCard;
-import domain.game.cards.card_strategies.SwapTopAndBottomCard;
+import domain.game.cards.card_strategies.*;
 
 import java.util.List;
 
@@ -19,12 +16,14 @@ public class Card {
 		this.cardType = cardType;
 		this.isFacedUp = false;
 		
-		if (cardType == CardType.NOPE) {
+		if (cardType == CardType.NOPE) { // maybe create factory object instead?
 			CardActionStrategy = new NopeCard();
 		} else if (cardType == CardType.SHUFFLE) {
             CardActionStrategy = new ShuffleCard();
         } else if (cardType == CardType.SWAP_TOP_AND_BOTTOM) {
             CardActionStrategy = new SwapTopAndBottomCard();
+        } else if (cardType == CardType.EXPLODING_KITTEN) {
+            CardActionStrategy = new ExplodingKittenCard();
         } else {
             CardActionStrategy = null;
         }
@@ -50,8 +49,8 @@ public class Card {
 		return isFacedUp;
 	}
 
-	public List<Card> playCard(List<Card> deck) {	
-		return CardActionStrategy.action(deck);
+	public GameTurnState playCard(GameTurnState gameTurnState) {
+		return CardActionStrategy.action(gameTurnState);
 	}
 }
 

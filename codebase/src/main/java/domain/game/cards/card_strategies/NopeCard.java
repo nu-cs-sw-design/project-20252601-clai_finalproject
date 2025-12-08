@@ -1,8 +1,10 @@
 package domain.game.cards.card_strategies;
 
 import domain.game.CardType;
+import domain.game.Game;
 import domain.game.cards.Card;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class NopeCard implements CardStrategy {
@@ -10,14 +12,17 @@ public class NopeCard implements CardStrategy {
     private final CardType cardType = CardType.NOPE;
 
     // remove card from hand, return
-    public List<Card> action(List<Card> deck) {
-        return playNope(deck);
+    public GameTurnState action(GameTurnState gameTurnState) {
+        return playNope(gameTurnState);
     }
     public CardType returnCardType() {
         // return proper card type
         return CardType.NOPE;
     }
-    private List<Card> playNope(List<Card> playerHand) {
+    private GameTurnState playNope(GameTurnState gameTurnState) {
+        // extract playerHand from gameturnstate
+        List<Card> playerHand = gameTurnState.getHand();
+
         // remove card from hand
         Card deletedCard = null;
         for (int i = 0; i < playerHand.size(); i++) {
@@ -29,7 +34,11 @@ public class NopeCard implements CardStrategy {
                 break;
             }
         }
+
+        // set playerhand in gameturnstate
+        gameTurnState.setHand(playerHand);
+
         // return player hand
-        return playerHand;
+        return gameTurnState;
     }
 }

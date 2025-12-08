@@ -1,6 +1,7 @@
 package domain.game;
 
 import domain.game.cards.Card;
+import domain.game.cards.card_strategies.GameTurnState;
 
 import java.util.List;
 import java.util.Random;
@@ -136,9 +137,6 @@ public class Game {
 	}
 
 	public boolean playExplodingKitten(int playerIndex) {
-		if (checkUserOutOfBounds(playerIndex)) {
-			throw new UnsupportedOperationException(INVALID_PLAYER_INDEX_EXCEPTION);
-		}
 		if (checkIfPlayerHasCard(playerIndex, CardType.DEFUSE)) {
 			return false;
 		}
@@ -485,14 +483,23 @@ public class Game {
 	}
 
 	// MORE SCALABLE VERSION
-	public boolean handlePlayCard(int playerIndex, CardType cardType, boolean shouldUpdateDeck) {
-		// get card, sanity check
-		if (!shouldUpdateDeck && playerIndex > 0) {
-			return players[playerIndex].playerPlayCard(cardType);
-		} else {
-			return deck.deckPlayCard(cardType);
-		}
+	public boolean handlePlayCard(int playerIndex, CardType cardType) {
+        // create state sharing var
+        GameTurnState gameTurnState = new GameTurnState(players[playerIndex].retrievePlayerHand(), deck.retrieveDeckContents());
+        gameTurnState.setPlayerNumTurns(currentPlayerTurn);
 
+        // play card
+        gameTurnState = players[playerIndex].playerPlayCard(cardType, gameTurnState);
+
+        // set new state in deck and player
+        players[playerIndex].setPlayerHand(gameTurnState.getHand());
+        deck.setDeckContents(gameTurnState.getDeck());
+        if (gameTurnState.isPlayerDead()) {
+            players[playerIndex].setIsDead();
+        }
+        setCurrentPlayerNumberOfTurns(gameTurnState.getPlayerNumTurns());
+
+        return gameTurnState.isPlayerDead();
 	}
 
 	void setNumberOfAttacks(int numberOfAttacks) {

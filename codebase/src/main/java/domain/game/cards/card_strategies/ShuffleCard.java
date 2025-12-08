@@ -1,6 +1,7 @@
 package domain.game.cards.card_strategies;
 
 import domain.game.CardType;
+import domain.game.Game;
 import domain.game.cards.Card;
 
 import java.util.List;
@@ -11,15 +12,17 @@ public class ShuffleCard implements CardStrategy {
     private final CardType cardType = CardType.SHUFFLE;
 
     // remove card from hand, return
-    public List<Card> action(List<Card> deck) {
-        return playShuffle(deck);
+    public GameTurnState action(GameTurnState gameTurnState) {
+        return playShuffle(gameTurnState);
     }
     public CardType returnCardType() {
         // return proper card type
         return cardType;
     }
-    private List<Card> playShuffle(List<Card> deck) {
+    private GameTurnState playShuffle(GameTurnState gameTurnState) {
         // randomize card selection
+        List<Card> deck = gameTurnState.getDeck();
+
         Random rand = new Random();
         for (int deckIndex = deck.size() - 1; deckIndex > 0; deckIndex--) {
             int indexToSwap = rand.nextInt(deckIndex + 1);
@@ -27,6 +30,9 @@ public class ShuffleCard implements CardStrategy {
             deck.set(indexToSwap, deck.get(deckIndex));
             deck.set(deckIndex, temporaryCard);
         }
-        return deck;
+
+        // set deck in gameturnstate
+        gameTurnState.setDeck(deck);
+        return gameTurnState;
     }
 }

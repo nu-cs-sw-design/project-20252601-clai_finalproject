@@ -6,6 +6,6 @@ import domain.game.cards.Card;
 import java.util.List;
 
 public interface CardStrategy {
-    List<Card> action(List<Card> deck);
-    CardType returnCardType();
+     GameTurnState action(GameTurnState gameTurnState);
+     CardType returnCardType();
 }

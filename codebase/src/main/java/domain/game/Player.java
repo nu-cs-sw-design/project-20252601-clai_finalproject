@@ -1,6 +1,7 @@
 package domain.game;
 
 import domain.game.cards.Card;
+import domain.game.cards.card_strategies.GameTurnState;
 
 import java.util.List;
 import java.util.Random;
@@ -68,13 +69,12 @@ public class Player {
 		throw new IllegalArgumentException(NO_CARD_FOUND_EXCEPTION);
 	}
 
-	public CardType removeCardFromHand(int index) {
+	public Card removeCardFromHand(int index) {
 		if (index < 0 || index >= getHandSize()) {
 			throw new IllegalArgumentException(NO_CARD_FOUND_EXCEPTION);
 		}
 		CardType cardType = hand.get(index).getCardType();
-		hand.remove(index);
-		return cardType;
+		return hand.remove(index);
 	}
 
 	public void shuffleHand() {
@@ -112,29 +112,20 @@ public class Player {
 		this.isCursed = isCursed;
 	}
 
+    List<Card> retrievePlayerHand() {
+        return this.hand;
+    }
+
+    void setPlayerHand(List<Card> playerHand) {
+        this.hand = playerHand;
+    }
+
 	// scalable vers
-	public boolean playerPlayCard(CardType cardType) {
-		// check if player has card
-		if (!hasCard(cardType)) {
-			return false;
-		}
-
+	public GameTurnState playerPlayCard(CardType cardType, GameTurnState gameTurnState) {
 		// otherwise, find card + play card
-		Card foundCard = null;
-		for (Card card : hand) {
-			if (card.getCardType() == cardType) {
-				foundCard = card;
-				break;
-			}
-		}
-		if (foundCard == null) return false;
-
+		Card newCard = new Card(cardType);
 		// play and get modified card hand
-		List<Card> newHand = foundCard.playCard(hand);
-
-		// set hand to new hand
-		hand = newHand;
-		return true;
+		return newCard.playCard(gameTurnState);
 	}
 
 }

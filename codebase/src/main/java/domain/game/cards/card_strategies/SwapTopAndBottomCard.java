@@ -1,6 +1,7 @@
 package domain.game.cards.card_strategies;
 
 import domain.game.CardType;
+import domain.game.Game;
 import domain.game.cards.Card;
 
 import java.util.List;
@@ -10,16 +11,19 @@ public class SwapTopAndBottomCard implements CardStrategy {
     private final CardType cardType = CardType.SWAP_TOP_AND_BOTTOM;
 
     // remove card from hand, return
-    public List<Card> action(List<Card> deck) {
-        return playSwapTopAndBottom(deck);
+    public GameTurnState action(GameTurnState gameTurnState) {
+        return playSwapTopAndBottom(gameTurnState);
     }
     public CardType returnCardType() {
         // return proper card type
         return cardType;
     }
-    private List<Card> playSwapTopAndBottom(List<Card> deck) {
+    private GameTurnState playSwapTopAndBottom(GameTurnState gameTurnState) {
+        // get deck
+        List<Card> deck = gameTurnState.getDeck();
+
         // sanity check
-        if (deck.size() < 2) return deck;
+        if (deck.size() < 2) return gameTurnState;
 
         // get top, bottom card
         Card top = deck.remove(0);
@@ -29,6 +33,8 @@ public class SwapTopAndBottomCard implements CardStrategy {
         deck.add(0, bottom);
         deck.add(top);
 
-        return deck;
+        // set gameturnstate
+        gameTurnState.setDeck(deck);
+        return gameTurnState;
     }
 }

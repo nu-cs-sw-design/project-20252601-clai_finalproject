@@ -205,22 +205,12 @@ public class Deck {
 		}
 	}
 
-    public boolean deckPlayCard(CardType cardType) {
-        Card foundCard = null;
-        for (Card card : deck) {
-            if (card.getCardType() == cardType) {
-                foundCard = card;
-                break;
-            }
-        }
-        if (foundCard == null) return false;
+    List<Card> retrieveDeckContents() {
+        return deck;
+    }
 
-        // play and get modified card hand
-        List<Card> newDeck = foundCard.playCard(deck);
-
-        // set hand to new hand
-        deck = newDeck;
-        return true;
+    void setDeckContents(List<Card> newDeck) {
+        this.deck = newDeck;
     }
 
 	private boolean addedOutOfBounds(int numberOfCards) {
