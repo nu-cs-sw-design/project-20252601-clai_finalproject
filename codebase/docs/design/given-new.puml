@@ -388,7 +388,9 @@ SwapTopAndBottomCard--|>CardStrategy
 Card-->CardStrategy
 
 CardStrategy--> GameTurnState
-
 Game..>GameTurnState
+Deck..>GameTurnState
+Player..>GameTurnState
+Card..>GameTurnState
 
 @enduml
